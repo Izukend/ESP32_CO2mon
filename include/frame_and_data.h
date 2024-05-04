@@ -1,7 +1,7 @@
 /**
  * @file frame_and_data.h
  * @date 2024-04-05
- * @author Tom
+ * @author Izukend
  */
 
 #include <ArduinoJson.h>// Inclure la bibliothèque ArduinoJson pour manipuler JSON
