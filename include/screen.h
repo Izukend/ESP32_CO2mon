@@ -1,7 +1,7 @@
 /**
  * @file screen.h
  * @date 2024-04-05
- * @author Matthieu et Tom
+ * @author Izukend
  */
 
 #include <Wire.h>
