@@ -1,7 +1,7 @@
 /**
  * @file sensors_data.h
  * @date 2024-04-05
- * @author Matthieu et Tom
+ * @author Izukend
  */
 
 #include "MHZ19.h"
