@@ -7,7 +7,7 @@ This project demonstrates how to configure an ESP32 to connect to a Wi-Fi statio
 1. **Connect the ESP32:** Connect your ESP32 board to your computer using a USB cable.
 
 2. **Install Dependencies:**
-   - Install the Arduino IDE if you haven't already.
+   - Install the PlatformIO if you haven't already.
    - Install the necessary libraries: `WiFi.h` and `PubSubClient.h`.
 
 3. **Configure Wi-Fi and MQTT Credentials:**
