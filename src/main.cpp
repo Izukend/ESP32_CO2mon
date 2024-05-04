@@ -1,86 +1,86 @@
 /**
  * @file main.cpp
- * @brief Configuration WiFi et MQTT depuis un site web
- * @author Matthieu et Tom
+ * @brief WiFi and MQTT Configuration from a Web Page
+ * @author Izukend
  * @date 2024-03-08
- * @description Permet de configurer WiFi et MQTT depuis un site web pour le technicien
+ * @description Allows configuring WiFi and MQTT from a web page for the technician
  */
 
-#include "main.h" // Inclure les bibliothèques nécessaires
+#include "main.h" // Include necessary libraries
 
-const char* ssid = "ConfigWifi"; // Nom du réseau WiFi du point d'accès
-const char* password = "Izu%2512"; // Mot de passe du point d'accès
-const char* redirectUrl = "/data/index.html"; // Chemin vers le fichier index.html
+const char* ssid = "Your ssid";
+const char* password = "Your password";
+const char* redirectUrl = "/data/index.html"; // Path to the index.html file
 
-unsigned long getDataTimer = 0; // Timer pour la récupération des données
+unsigned long getDataTimer = 0; // Timer for data retrieval
 
 /**
- * @brief Fonction de gestion de la page d'accueil
+ * @brief Function for handling the home page
  * 
- * Cette fonction redirige vers la page web de configuration.
+ * This function redirects to the configuration web page.
  */
 void handleRoot() {
-  server.sendHeader("Location", redirectUrl); // Rediriger vers l'URL spécifiée
-  server.send(200, "text/html", Home); // Envoyer la page d'accueil au client
-  Serial.println("Redirection vers la page web...");
+  server.sendHeader("Location", redirectUrl); // Redirect to the specified URL
+  server.send(200, "text/html", Home); // Send the home page to the client
+  Serial.println("Redirecting to web page...");
 }
 
 /**
- * @brief Fonction d'initialisation
+ * @brief Initialization function
  * 
- * Cette fonction initialise le système et configure le point d'accès WiFi.
+ * This function initializes the system and configures the WiFi access point.
  */
 void setup() {
-  // Initialisation
-  Serial.begin(9600); // Démarrer la communication série
-  delay(2000); // Attendre 2 secondes pour permettre le démarrage
+  // Initialization
+  Serial.begin(9600); // Start serial communication
+  delay(2000); // Wait 2 seconds to allow startup
 
-  // Initialisation de l'écran OLED
+  // OLED screen initialization
   oledInit();
 
-  // Configuration du mode point d'accès WiFi
-  WiFi.mode(WIFI_MODE_AP); // Configurer le mode WiFi en point d'accès
-  WiFi.softAP(ssid, password); // Démarrer le point d'accès WiFi
+  // Configure WiFi access point mode
+  WiFi.mode(WIFI_MODE_AP); // Configure WiFi mode to access point
+  WiFi.softAP(ssid, password); // Start WiFi access point
 
-  // Affichage de l'adresse IP du point d'accès
-  Serial.print("Adresse IP du point d'accès: ");
+  // Display access point IP address
+  Serial.print("Access Point IP Address: ");
   Serial.println(WiFi.softAPIP());
 
-  // Configuration du serveur Web pour gérer la redirection
-  server.on("/", handleRoot); // Gérer la page d'accueil
+  // Configure the Web server to handle redirection
+  server.on("/", handleRoot); // Handle the home page
 
-  // Gérer la soumission du formulaire
+  // Handle form submission
   server.on("/submit", HTTP_POST, [](){
-      server.send(200, "text/plain", "Données reçues avec succès !");
+      server.send(200, "text/plain", "Data received successfully !");
       handleFormSubmit();
   });
 
-  server.begin(); // Démarrer le serveur Web
-  Serial.println("Serveur Web démarré !");
+  server.begin(); // Start the Web server
+  Serial.println("Web Server started !");
 }
 
 /**
- * @brief Fonction principale de la boucle de programme
+ * @brief Main function of the program loop
  * 
- * Cette fonction gère les clients HTTP et MQTT, récupère périodiquement les données des capteurs
- * et les envoie via MQTT.
+ * This function handles HTTP and MQTT clients, periodically retrieves sensor data,
+ * and sends it via MQTT.
  */
 void loop() {
-    // Gestion des clients (HTTP et MQTT)
-    server.handleClient(); // Gérer les requêtes HTTP
-    client.loop(); // Gérer les messages MQTT
+    // Handle clients (HTTP and MQTT)
+    server.handleClient(); // Handle HTTP requests
+    client.loop(); // Handle MQTT messages
 
-    // Vérifier si le client MQTT est connecté
+    // Check if MQTT client is connected
     if (client.connected()) {
-        // Afficher les données de CO2 en temps réel
+        // Display real-time CO2 data
         oledPrintData();
 
-        // Vérifier si le délai pour récupérer les données est écoulé
-        if (millis() - getDataTimer >= 60000) { // Attendre 60 secondes
-            // Envoyer le message MQTT contenant les données JSON
+        // Check if it's time to retrieve data
+        if (millis() - getDataTimer >= 60000) { // Wait 60 seconds
+            // Send MQTT message containing JSON data
             sendMQTTFrame(createJSONMessage());
-            Serial.println("Envoie de la trame réussis");
-            // Réinitialiser le compteur de temps
+            Serial.println("Frame sent successfully");
+            // Reset timer
             getDataTimer = millis();
         }
     }
