@@ -1,7 +1,7 @@
 /**
  * @file main.h
  * @date 2024-04-05
- * @author Tom
+ * @author Izukend
  */
 
 #include "../include/screen.h"
