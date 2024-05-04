@@ -1,79 +1,79 @@
 /**
  * @file sensors_data.cpp
- * @brief Récupération des données de capteurs
+ * @brief Sensor Data Retrieval
  * @date 2024-04-05
- * @author Matthieu et Tom
+ * @author Izukend
  */
 
-#include "../../include/sensors_data.h" // Inclure les bibliothèques nécessaires
+#include "../../include/sensors_data.h" // Include necessary libraries
 
-#define RX_PIN 10 // Définir la broche RX pour la communication série
-#define TX_PIN 11 // Définir la broche TX pour la communication série
-#define BAUDRATE 9600 // Définir le débit en bauds pour la communication série
+#define RX_PIN 10 // Define the RX pin for serial communication
+#define TX_PIN 11 // Define the TX pin for serial communication
+#define BAUDRATE 9600 // Define the baud rate for serial communication
 
-MHZ19 myMHZ19; // Déclarer un objet pour le capteur MH-Z19
-DHTesp dht; // Déclarer un objet pour le capteur DHT22
-SoftwareSerial mySerial(RX_PIN, TX_PIN); // Déclarer un objet pour la communication série logicielle
+MHZ19 myMHZ19; // Declare an object for the MH-Z19 sensor
+DHTesp dht; // Declare an object for the DHT22 sensor
+SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare an object for software serial communication
 
-int dhtPin = 17; // Définir la broche à laquelle le capteur DHT22 est connecté
+int dhtPin = 17; // Define the pin to which the DHT22 sensor is connected
 
 /**
- * @brief Fonction pour récupérer les données de CO2
+ * @brief Function to retrieve CO2 data
  * 
- * Cette fonction initialise la communication série avec le capteur MH-Z19, récupère les données brutes de CO2,
- * les ajuste selon une formule spécifique, puis les convertit en un entier.
+ * This function initializes serial communication with the MH-Z19 sensor, retrieves raw CO2 data,
+ * adjusts it according to a specific formula, and then converts it to an integer.
  * 
- * @return La valeur de CO2 ajustée en entier
+ * @return The adjusted CO2 value as an integer
  */
 int recoverCO2Data() {
-    mySerial.begin(BAUDRATE); // Initialiser la communication série
-    myMHZ19.begin(mySerial); // Initialiser le capteur MH-Z19
+    mySerial.begin(BAUDRATE); // Initialize serial communication
+    myMHZ19.begin(mySerial); // Initialize the MH-Z19 sensor
 
-    double adjustedCO2 = myMHZ19.getCO2(); // Récupérer les données brutes de CO2 depuis le capteur
+    double adjustedCO2 = myMHZ19.getCO2(); // Retrieve raw CO2 data from the sensor
 
     Serial.println("----------------");
-    Serial.print("Affichage CO2: ");
+    Serial.print("CO2 Reading: ");
     Serial.println(adjustedCO2);
-    // Convertir la valeur en entier
+    // Convert the value to an integer
     int intValue = int(adjustedCO2);
     
-    return intValue; // Retourner la valeur de CO2
+    return intValue; // Return the CO2 value
 }
 
 /**
- * @brief Fonction pour récupérer la température
+ * @brief Function to retrieve temperature
  * 
- * Cette fonction configure le capteur DHT22, récupère les données de température et les convertit en un entier.
+ * This function sets up the DHT22 sensor, retrieves temperature data, and converts it to an integer.
  * 
- * @return La température en entier
+ * @return The temperature as an integer
  */
 int recoverTemp(){
-    dht.setup(dhtPin, DHTesp::DHT22); // Configurer le capteur DHT22
-    TempAndHumidity value = dht.getTempAndHumidity(); // Récupérer les données de température
+    dht.setup(dhtPin, DHTesp::DHT22); // Set up the DHT22 sensor
+    TempAndHumidity value = dht.getTempAndHumidity(); // Retrieve temperature data
     
     Serial.println("----------------");
-    Serial.println("Affichage Temp :");
+    Serial.println("Temperature Reading:");
     Serial.println(value.temperature);
     
-    int tempValue = int(value.temperature); // Convertir la température en entier
-    return tempValue; // Retourner la température
+    int tempValue = int(value.temperature); // Convert temperature to an integer
+    return tempValue; // Return the temperature
 }
 
 /**
- * @brief Fonction pour récupérer l'humidité
+ * @brief Function to retrieve humidity
  * 
- * Cette fonction configure le capteur DHT22, récupère les données d'humidité et les convertit en un entier.
+ * This function sets up the DHT22 sensor, retrieves humidity data, and converts it to an integer.
  * 
- * @return L'humidité en entier
+ * @return The humidity as an integer
  */
 int recoverHum() {
-    dht.setup(dhtPin, DHTesp::DHT22); // Configurer le capteur DHT22
-    TempAndHumidity value = dht.getTempAndHumidity(); // Récupérer les données d'humidité
+    dht.setup(dhtPin, DHTesp::DHT22); // Set up the DHT22 sensor
+    TempAndHumidity value = dht.getTempAndHumidity(); // Retrieve humidity data
     
     Serial.println("----------------");
-    Serial.println("Affichage Hum :");
+    Serial.println("Humidity Reading:");
     Serial.println(value.humidity);
     
-    int humidityValue = int(value.humidity); // Convertir l'humidité en entier
-    return humidityValue; // Retourner l'humidité
+    int humidityValue = int(value.humidity); // Convert humidity to an integer
+    return humidityValue; // Return the humidity
 }
