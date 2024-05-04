@@ -1,35 +1,35 @@
 /**
  * @file frame_and_data.cpp
- * @brief Création de la trame JSON contenant les données des capteurs
+ * @brief Creation of JSON frame containing sensor data
  * @date 2024-04-05
- * @author Tom
+ * @author Izukend
  */
 
-#include "../../include/frame_and_data.h" // Inclure les bibliothèques nécessaires
+#include "../../include/frame_and_data.h" // Including necessary libraries
 
 /**
- * @brief Fonction pour créer la trame JSON contenant les données des capteurs
+ * @brief Function to create the JSON frame containing sensor data
  * 
- * Cette fonction crée un objet JSON pour stocker les données de température, d'humidité,
- * de CO2 et l'adresse MAC de l'ESP32. Les données sont récupérées à partir des fonctions
- * correspondantes de récupération des capteurs.
+ * This function creates a JSON object to store temperature, humidity,
+ * CO2 data, and the MAC address of the ESP32. The data is retrieved from
+ * the corresponding sensor recovery functions.
  * 
- * @return La trame JSON contenant les données des capteurs
+ * @return The JSON frame containing sensor data
  */
 String createJSONMessage() {
-    // Créer un objet JSON pour stocker les données
+    // Create a JSON object to store data
     StaticJsonDocument<200> jsonDoc;
 
-    // Ajouter des données à l'objet JSON
-    jsonDoc["esp32_mac"] = WiFi.macAddress(); // Ajouter l'adresse MAC de l'ESP32
-    jsonDoc["temperature"] = recoverTemp(); // Ajouter la température
-    delay(200); // Attendre un court délai pour éviter les problèmes de lecture concurrente
-    jsonDoc["humidity"] = recoverHum(); // Ajouter l'humidité
-    jsonDoc["co2"] = recoverCO2Data(); // Ajouter les données de CO2
+    // Add data to the JSON object
+    jsonDoc["esp32_mac"] = WiFi.macAddress(); // Add ESP32 MAC address
+    jsonDoc["temperature"] = recoverTemp(); // Add temperature
+    delay(200); // Wait for a short delay to avoid concurrent reading issues
+    jsonDoc["humidity"] = recoverHum(); // Add humidity
+    jsonDoc["co2"] = recoverCO2Data(); // Add CO2 data
 
-    // Convertir l'objet JSON en chaîne JSON
+    // Convert the JSON object to JSON string
     String jsonString;
     serializeJson(jsonDoc, jsonString);
 
-    return jsonString; // Retourner la trame JSON
+    return jsonString; // Return the JSON frame
 }
