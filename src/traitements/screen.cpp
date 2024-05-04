@@ -1,67 +1,67 @@
 /**
  * @file screen.cpp
- * @brief Gestion de l'écran OLED
+ * @brief OLED Screen Management
  * @date 2024-04-05
- * @author Matthieu et Tom
+ * @author Izukend
  */
 
-#include "../../include/screen.h" // Inclure les bibliothèques nécessaires
+#include "../../include/screen.h" // Including necessary libraries
 
-SSD1306Wire display(0x3c, SDA, SCL); // Créer une instance d'écran OLED avec l'adresse 0x3c
+SSD1306Wire display(0x3c, SDA, SCL); // Creating an instance of the OLED screen with address 0x3c
 
 /**
- * @brief Fonction d'initialisation de l'écran OLED
+ * @brief Function to initialize the OLED screen
  * 
- * Cette fonction initialise l'écran OLED en configurant l'affichage avec un texte centré
- * indiquant l'adresse IP à entrer dans le navigateur web.
+ * This function initializes the OLED screen by configuring the display with centered text
+ * indicating the IP address to enter in the web browser.
  */
 void oledInit(){
-    // Initialiser l'écran OLED
+    // Initialize the OLED screen
     display.init();
-    display.setTextAlignment(TEXT_ALIGN_CENTER); // Alignement du texte au centre
-    display.setFont(ArialMT_Plain_10); // Utiliser la police ArialMT en taille 10
+    display.setTextAlignment(TEXT_ALIGN_CENTER); // Text alignment set to center
+    display.setFont(ArialMT_Plain_10); // Using ArialMT font with size 10
 
-    // Afficher le texte sur l'écran OLED
-    display.drawString(64, 16, "Rentrer sur navigateur web :");
+    // Display text on the OLED screen
+    display.drawString(64, 16, "Enter on web browser:");
     display.drawString(64, 48, "192.168.4.1");
-    display.display(); // Mettre à jour l'affichage
+    display.display(); // Update the display
 }
 
 /**
- * @brief Fonction pour effacer l'écran OLED
+ * @brief Function to clear the OLED screen
  * 
- * Cette fonction efface le contenu actuel de l'écran OLED.
+ * This function clears the current content of the OLED screen.
  */
 void oledErase(){
-    display.clear(); // Effacer l'écran OLED
-    display.display(); // Mettre à jour l'affichage pour appliquer les modifications
+    display.clear(); // Clear the OLED screen
+    display.display(); // Update the display to apply the changes
 }
 
 /**
- * @brief Affiche les données de CO2 sur l'écran OLED.
+ * @brief Display CO2 data on the OLED screen.
  * 
- * Cette fonction initialise la communication série avec le capteur MH-Z19, récupère les données
- * de CO2 depuis le capteur, les convertit en chaîne de caractères et les affiche sur l'écran OLED.
+ * This function initializes serial communication with the MH-Z19 sensor, retrieves the CO2 data
+ * from the sensor, converts it to a string, and displays it on the OLED screen.
  */
 void oledPrintData() {
-    // Initialiser la communication série avec le capteur MH-Z19
+    // Initialize serial communication with the MH-Z19 sensor
     mySerial.begin(9600);
-    // Initialiser le capteur MH-Z19
+    // Initialize the MH-Z19 sensor
     myMHZ19.begin(mySerial);
 
-    // Attendre 3 secondes pour permettre au capteur de s'initialiser
+    // Wait for 3 seconds to allow the sensor to initialize
     delay(2000);
 
-    // Récupérer les données brutes de CO2 depuis le capteur MH-Z19
+    // Retrieve raw CO2 data from the MH-Z19 sensor
     double adjustedCO2 = myMHZ19.getCO2();
-    // Convertir les données de CO2 en chaîne de caractères
+    // Convert CO2 data to a string
     String strCO2 = String(adjustedCO2);
-    // Effacer l'écran OLED pour une nouvelle mise à jour
+    // Clear the OLED screen for a fresh update
     display.clear();
 
-    // Afficher les données de CO2 en haut de l'écran OLED
+    // Display CO2 data at the top of the OLED screen
     display.drawString(64, 16, "CO2: " + strCO2);
 
-    // Mettre à jour l'affichage sur l'écran OLED
+    // Update the display on the OLED screen
     display.display();
 }
