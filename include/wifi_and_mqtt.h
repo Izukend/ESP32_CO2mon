@@ -1,7 +1,7 @@
 /**
  * @file wifi_and_mqtt.h
  * @date 2024-04-05
- * @author Tom
+ * @author Izukend
  */
 
 #include <WiFi.h>
