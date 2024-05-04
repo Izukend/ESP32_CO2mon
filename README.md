@@ -14,13 +14,8 @@ This project demonstrates how to configure an ESP32 to connect to a Wi-Fi statio
    - Open the `wifi_mqtt_config.ino` file in your Arduino IDE.
    - Replace the placeholders with your Wi-Fi and MQTT credentials:
      ```cpp
-     const char* ssid = "YourWiFiSSID";
-     const char* password = "YourWiFiPassword";
-     const char* mqttServer = "mqtt.example.com";
-     const int mqttPort = 1883;
-     const char* mqttUser = "YourMQTTUsername";
-     const char* mqttPassword = "YourMQTTPassword";
-     const char* mqttTopic = "esp32/data";
+      const char* ssid = "Your ssid";
+      const char* password = "Your password";
      ```
 
 4. **Upload the Sketch:** Upload the sketch to your ESP32 board.
